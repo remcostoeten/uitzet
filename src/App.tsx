@@ -1,38 +1,47 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
-	const [count, setCount] = useState(0);
-
+function ChecklistItem({ item, handleToggle }) {
 	return (
-		<div className='App'>
-			<div>
-				<a href='https://vitejs.dev' target='_blank'>
-					<img src='/vite.svg' className='logo' alt='Vite logo' />
-				</a>
-				<a href='https://reactjs.org' target='_blank'>
-					<img
-						src={reactLogo}
-						className='logo react'
-						alt='React logo'
-					/>
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className='card'>
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className='read-the-docs'>
-				Click on the Vite and React logos to learn more
-			</p>
-		</div>
+		<li>
+			<label>
+				<input
+					type='checkbox'
+					checked={item.completed}
+					onChange={() => handleToggle(item.id)}
+				/>
+				{item.name}
+			</label>
+		</li>
 	);
 }
 
-export default App;
+function Checklist() {
+	const [items, setItems] = useState([
+		{ id: 1, name: 'Toiletpapier', completed: false },
+		{ id: 2, name: 'Handdoeken', completed: false },
+		{ id: 3, name: 'Schoonmaakspullen', completed: false },
+		{ id: 4, name: 'Keukengerei', completed: false },
+		{ id: 5, name: 'Beddengoed', completed: false },
+	]);
+
+	const handleToggle = (id) => {
+		const updatedItems = items.map((item) =>
+			item.id === id ? { ...item, completed: !item.completed } : item,
+		);
+		setItems(updatedItems);
+	};
+
+	return (
+		<ul>
+			{items.map((item) => (
+				<ChecklistItem
+					key={item.id}
+					item={item}
+					handleToggle={handleToggle}
+				/>
+			))}
+		</ul>
+	);
+}
+
+export default Checklist;
